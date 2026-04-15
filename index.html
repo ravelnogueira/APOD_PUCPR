@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>APOD Viewer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="stars" aria-hidden="true"></div>
+    <header class="page-header">
+      <h1>APOD Viewer</h1>
+      <p>Astronomy Picture of the Day da NASA por data</p>
+    </header>
+
+    <main>
+      <section class="app-card" aria-labelledby="app-title">
+        <h2 id="app-title" class="sr-only">Buscador APOD</h2>
+
+        <section class="search-section" aria-label="Busca por data">
+          <label for="dateInput">Escolha a data</label>
+          <div class="controls">
+            <input type="date" id="dateInput" />
+            <button id="searchButton" type="button">Buscar midia</button>
+          </div>
+        </section>
+
+        <p id="statusMessage" class="status status-idle" aria-live="polite">
+          Selecione uma data para consultar o APOD.
+        </p>
+
+        <section id="resultSection" class="result" aria-live="polite">
+          <div id="mediaContainer" class="media-frame" aria-label="Midia APOD">
+            <div class="media-placeholder">Aguardando conteudo</div>
+          </div>
+
+          <div class="meta">
+            <div class="meta-header">
+              <h3 id="apodTitle">Titulo da publicacao</h3>
+              <span id="videoTag" class="video-tag hidden">Conteudo em video</span>
+            </div>
+            <p id="apodDate"></p>
+            <p id="apodCopyright"></p>
+          </div>
+
+          <article id="apodDescription" class="description"></article>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
