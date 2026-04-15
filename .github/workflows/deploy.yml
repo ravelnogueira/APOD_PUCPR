@@ -17,8 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate-deploy:
-    if: github.event_name == 'pull_request'
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -38,25 +37,29 @@ jobs:
           done
           echo "Static site structure is ready for deployment."
 
+      - name: Upload artifact for Pages
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
   deploy:
-    if: github.event_name != 'pull_request'
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Deploy simulation for PR
+        if: github.event_name == 'pull_request'
+        run: echo "CD validated in PR. Real deploy happens on push to main."
 
       - name: Setup Pages
+        if: github.event_name == 'push'
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "."
-
       - name: Deploy to GitHub Pages
+        if: github.event_name == 'push'
         id: deployment
         uses: actions/deploy-pages@v4
