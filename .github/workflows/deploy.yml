@@ -1,6 +1,8 @@
 name: CD - Deploy to GitHub Pages
 
 on:
+  pull_request:
+    branches: ["main"]
   push:
     branches: ["main"]
   workflow_dispatch:
@@ -15,7 +17,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate-deploy:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate deployable structure
+        run: |
+          required_files=("index.html" "style.css" "script.js" "README.md")
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "Missing required deploy file: $file"
+              exit 1
+            fi
+          done
+          echo "Static site structure is ready for deployment."
+
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
