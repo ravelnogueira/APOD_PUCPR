@@ -1,11 +1,8 @@
 name: CD - Deploy to GitHub Pages
 
 on:
-  pull_request:
-    branches: ["main"]
   push:
     branches: ["main"]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -38,7 +35,6 @@ jobs:
           echo "Static site structure is ready for deployment."
 
       - name: Upload artifact for Pages
-        if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
           path: "."
@@ -51,15 +47,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy simulation for PR
-        if: github.event_name == 'pull_request'
-        run: echo "CD validated in PR. Real deploy happens on push to main."
-
       - name: Setup Pages
-        if: github.event_name == 'push'
         uses: actions/configure-pages@v5
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push'
         id: deployment
         uses: actions/deploy-pages@v4
