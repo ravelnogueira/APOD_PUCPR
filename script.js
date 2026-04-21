@@ -1,4 +1,4 @@
-const API_KEY = "DEMO_KEY";
+const API_KEY = "sJT9kQAoA7iHfUiWP5Vf0tFUJ3Um3lmYSeUrkudI";
 const APOD_ENDPOINT = "https://api.nasa.gov/planetary/apod";
 
 const dateInput = document.getElementById("dateInput");
