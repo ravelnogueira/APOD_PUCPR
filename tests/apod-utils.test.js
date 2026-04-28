@@ -73,5 +73,3 @@ test("resolveMediaUrl handles video and unsupported media", () => {
     ""
   );
 });
-
-  //só quero gerar mais um alert no discord
