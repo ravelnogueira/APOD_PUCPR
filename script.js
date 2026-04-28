@@ -1,6 +1,13 @@
 const API_KEY = "sJT9kQAoA7iHfUiWP5Vf0tFUJ3Um3lmYSeUrkudI";
 const APOD_ENDPOINT = "https://api.nasa.gov/planetary/apod";
 
+if (!window.APODUtils) {
+  throw new Error("APODUtils nao carregado.");
+}
+
+const { formatDate, getTodayIso, isFutureDate, isValidApodPayload, resolveMediaUrl } =
+  window.APODUtils;
+
 const dateInput = document.getElementById("dateInput");
 const searchButton = document.getElementById("searchButton");
 const statusMessage = document.getElementById("statusMessage");
@@ -11,26 +18,6 @@ const apodDate = document.getElementById("apodDate");
 const apodDescription = document.getElementById("apodDescription");
 const apodCopyright = document.getElementById("apodCopyright");
 const videoTag = document.getElementById("videoTag");
-
-function getTodayIso() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function formatDate(date) {
-  const parsed = new Date(`${date}T00:00:00`);
-  if (Number.isNaN(parsed.getTime())) {
-    return date;
-  }
-  return parsed.toLocaleDateString("pt-BR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
-}
 
 function setStatus(message, type) {
   statusMessage.textContent = message;
@@ -65,7 +52,7 @@ function renderFallback() {
 }
 
 function renderApod(data) {
-  if (!data || !data.title || !data.date || !data.explanation || !data.media_type) {
+  if (!isValidApodPayload(data)) {
     renderFallback();
     setStatus("Resposta recebida, mas com formato inesperado.", "error");
     return;
@@ -73,7 +60,7 @@ function renderApod(data) {
 
   const isImage = data.media_type === "image";
   const isVideo = data.media_type === "video";
-  const mediaUrl = isImage ? data.hdurl || data.url : data.url;
+  const mediaUrl = resolveMediaUrl(data);
 
   if (!mediaUrl) {
     renderFallback();
@@ -118,10 +105,6 @@ function setLoadingState(isLoading) {
 function setMaxDateToday() {
   const today = getTodayIso();
   dateInput.max = today;
-}
-
-function isFutureDate(date) {
-  return date > getTodayIso();
 }
 
 async function fetchApodByDate(date) {

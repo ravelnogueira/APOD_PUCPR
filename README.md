@@ -33,7 +33,7 @@ Aplicacao web estatica para consultar o APOD (Astronomy Picture of the Day) da N
 1. Clone este repositorio:
 
 ```bash
-git clone https://github.com/ravelnogueira/ATV-PUCPR.git
+git clone https://github.com/ravelnogueira/APOD_PUCPR.git
 ```
 
 2. Entre na pasta do projeto:
@@ -44,11 +44,49 @@ cd APOD-PUCPPR
 
 3. Abra `index.html` no navegador.
 
-Observacao: por padrao, o projeto usa `DEMO_KEY` da NASA no arquivo `script.js`. Se quiser, troque por uma chave propria na constante `API_KEY`.
+Observacao: o projeto usa chave da API da NASA no arquivo `script.js`.
+
+## Testes unitarios
+
+Este projeto possui testes unitarios para utilitarios de regra de negocio APOD.
+
+Arquivos relacionados:
+
+- `apod-utils.js`
+- `tests/apod-utils.test.js`
+- `package.json`
+
+Rodar testes localmente:
+
+```bash
+npm test
+```
+
+No CI, os testes rodam automaticamente em Pull Requests para `main`.
 
 ## Deploy (GitHub Pages)
 
 Depois do merge na branch `main`, o workflow de deploy publica o site no GitHub Pages.
+
+## Alertas no Discord (GitHub Actions)
+
+O workflow `.github/workflows/discord-alert.yml` envia alerta para Discord em cada `push` na branch `main`.
+
+Para habilitar:
+
+1. Crie um webhook no canal do Discord.
+2. No GitHub, acesse:
+
+```text
+Settings > Secrets and variables > Actions > New repository secret
+```
+
+3. Crie o secret:
+
+```text
+Name: DISCORD_WEBHOOK_URL
+Value: <URL do webhook do Discord>
+```
 
 ## API utilizada
 
