@@ -64,7 +64,7 @@ test("resolveMediaUrl handles video and unsupported media", () => {
     }),
     "https://example.com/video"
   );
-
+  
   assert.equal(
     resolveMediaUrl({
       media_type: "audio",
@@ -73,3 +73,5 @@ test("resolveMediaUrl handles video and unsupported media", () => {
     ""
   );
 });
+
+  //só quero gerar mais um alert no discord
